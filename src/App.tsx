@@ -15,12 +15,12 @@ const App = () => {
 
   const handleToggle = (id: string) => {
     setTodos(
-      todos.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : todo))
+      todos.map(todo => (todo.id === id ? { ...todo, done: !todo.done } : todo)),
     );
   };
 
   const handleDelete = (id: string) => {
-    setTodos(todos.filter((todo)=> todo.id !== id));
+    setTodos(todos.filter(todo => todo.id !== id));
   };
 
   const handleAdd = (title: string) => {
@@ -28,11 +28,10 @@ const App = () => {
       id: crypto.randomUUID(),
       title,
       done: false,
-      priority: 'low'
+      priority: 'low',
     };
     setTodos([...todos, newTodo]);
   };
-
 
   return (
     <div className="app">
@@ -40,8 +39,8 @@ const App = () => {
         <h1>Taskly</h1>
         <p className="app-subtitle">할 일 {todos.length}개</p>
       </header>
-      <TodoForm onAdd={handleAdd}/>
-      <TodoList todos={todos} onToggle={handleToggle} onDelete={handleDelete}/>
+      <TodoForm onAdd={handleAdd} />
+      <TodoList todos={todos} onToggle={handleToggle} onDelete={handleDelete} />
     </div>
   );
 };

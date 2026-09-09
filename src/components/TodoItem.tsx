@@ -1,9 +1,9 @@
 import type { Todo } from '@/types/todo';
 
 type TodoItemProps = {
-  todo: Todo
-  onToggle: (id: string) => void
-  onDelete: (id: string) => void
+  todo: Todo;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 };
 
 const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
@@ -22,7 +22,8 @@ const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
         className="todo-delete"
         onClick={() => onDelete(todo.id)}
         aria-label={`${todo.title} 삭제`}
-      >x</button>
+      >x
+      </button>
     </li>
   );
 };

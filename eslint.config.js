@@ -15,15 +15,18 @@ export default defineConfig([
       tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
+      stylistic.configs.customize({
+        indent: 2,
+        quotes: 'single',
+        semi: true,
+        jsx: true,
+      }),
     ],
     languageOptions: {
       globals: globals.browser,
     },
-    plugins: {
-      '@stylistic': stylistic,
-    },
     rules: {
-      '@stylistic/semi': ['error', 'always'],
+      '@stylistic/jsx-one-expression-per-line': 'off',
     },
   },
 ])
