@@ -18,13 +18,18 @@ const App = () => {
     )
   }
 
+  const handleDelete = (id: string) => {
+    setTodos(todos.filter((todo)=> todo.id !== id))
+  }
+
+
   return (
     <div className="app">
       <header className="app-header">
         <h1>Taskly</h1>
         <p className="app-subtitle">할 일 {todos.length}개</p>
       </header>
-      <TodoList todos={todos} onToggle={handleToggle} />
+      <TodoList todos={todos} onToggle={handleToggle} onDelete={handleDelete}/>
     </div>
   )
 }
