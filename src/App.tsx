@@ -15,6 +15,12 @@ const App = () => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [filter, setFilter] = useState<TodoFilter>('all');
   const [keyword, setKeyword] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const handleEditSubmit = (id: string, title: string) => {
+    setTodos(prev => prev.map(todo => (todo.id === id ? { ...todo, title } : todo)));
+    setEditingId(null);
+  };
 
   // 파생 값 — 상태로 두지 않고 매 렌더마다 계산한다
   const doneCount = todos.filter(todo => todo.done).length;
@@ -78,7 +84,15 @@ const App = () => {
         onKeywordChange={setKeyword}
       />
 
-      <TodoList todos={visibleTodos} onToggle={handleToggle} onDelete={handleDelete} />
+      <TodoList
+        todos={visibleTodos}
+        editingId={editingId}
+        onToggle={handleToggle}
+        onDelete={handleDelete}
+        onStartEdit={setEditingId}
+        onEditSubmit={handleEditSubmit}
+        onEditCancel={() => setEditingId(null)}
+      />
     </div>
   );
 };
