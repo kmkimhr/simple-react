@@ -10,6 +10,10 @@ type ModalProps = {
   children: ReactNode;
 };
 
+/** 모달 안에서 포커스를 받을 수 있는 요소들 */
+const FOCUSABLE
+  = 'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+
 const Modal = ({ isOpen, title, onClose, children }: ModalProps) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -21,8 +25,30 @@ const Modal = ({ isOpen, title, onClose, children }: ModalProps) => {
     dialogRef.current?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+
+      // 포커스 트랩: Tab 이 모달 밖으로 나가지 않게 순환시킨다
+      if (e.key !== 'Tab') return;
+
+      const focusables = dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE);
+      if (!focusables || focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+      else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     document.addEventListener('keydown', handleKeyDown);
 
     return () => {

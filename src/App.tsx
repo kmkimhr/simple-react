@@ -1,8 +1,9 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import TodoList from '@/components/TodoList';
 import TodoForm from '@/components/TodoForm';
 import type { Todo, TodoFilter } from '@/types/todo';
 import FilterBar from '@/components/FilterBar';
+import type { FilterBarHandle } from '@/components/FilterBar';
 import { todosReducer } from '@/reducers/todosReducer';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import Button from '@/components/ui/Button';
@@ -35,6 +36,7 @@ const App = () => {
   const [filter, setFilter] = useLocalStorage<TodoFilter>('taskly.filter', 'all');
   const [keyword, setKeyword] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
+  const filterBarRef = useRef<FilterBarHandle>(null);
 
   // 파생 값 — 상태로 두지 않고 매 렌더마다 계산한다
   const doneCount = todos.filter(todo => todo.done).length;
@@ -46,7 +48,6 @@ const App = () => {
       return true;
     })
     .filter(todo => todo.title.toLowerCase().includes(normalizedKeyword));
-
 
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
@@ -65,16 +66,26 @@ const App = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
   }, [todos]);
 
+  // "/" 를 누르면 검색창으로 포커스 이동
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== '/') return;
+      if (e.target instanceof HTMLInputElement) return; // 입력 중이면 무시
+
+      e.preventDefault();
+      filterBarRef.current?.focus();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const handleAdd = (title: string) => {
     dispatch({ type: 'added', id: crypto.randomUUID(), title });
   };
 
   const handleToggle = (id: string) => {
     dispatch({ type: 'toggled', id });
-  };
-
-  const handleDelete = (id: string) => {
-    dispatch({ type: 'deleted', id });
   };
 
   const handleEditSubmit = (id: string, title: string) => {
@@ -104,6 +115,7 @@ const App = () => {
       <TodoForm onAdd={handleAdd} />
 
       <FilterBar
+        ref={filterBarRef}
         filter={filter}
         keyword={keyword}
         onFilterChange={setFilter}
