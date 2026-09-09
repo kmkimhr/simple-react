@@ -62,14 +62,19 @@ type TodoItemProps = {
   onToggle: (id: string) => void
 }
 
-function TodoItem({ todo, onToggle }: TodoItemProps) {
-  return <li>{todo.title}</li>
+const TodoItem = ({ todo, onToggle }: TodoItemProps) => {
+  const handleClick = () => {
+    onToggle(todo.id)
+  }
+
+  return <li onClick={handleClick}>{todo.title}</li>
 }
 
 export default TodoItem
 ```
 
-- 컴포넌트는 `function` 선언 + `export default`. 화살표 함수 컴포넌트 금지.
+- **모든 함수는 화살표 함수(`const`)로 선언한다.** 컴포넌트·핸들러·유틸 전부. `function` 키워드 금지.
+- `export default`는 파일 맨 아래에서 이름으로. `export default () => {}` 같은 익명 export 금지 (Fast Refresh가 깨진다).
 - props는 구조 분해로 받는다.
 - props 타입은 같은 파일 안에 정의한다.
 - 타입 선언은 `type`으로 통일 (`interface` 금지).

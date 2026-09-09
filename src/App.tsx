@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { Todo } from '@/types/todo'
 import TodoList from '@/components/TodoList'
 
@@ -9,13 +10,23 @@ const initialTodos: Todo[] = [
 ]
 
 function App() {
+
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
+
+  const handleToggle = (id: string) => {
+    setTodos(
+      todos.map((todo)=> todo.id === id ? {...todo, done: !todo.done} : todo)
+    )
+  }
+
   return (
     <div className="app">
+
       <header className="app-header">
         <h1>Taskly</h1>
         <p className="app-subtitle">할 일 {initialTodos.length}개</p>
       </header>
-      <TodoList todos={initialTodos} />
+      <TodoList todos={initialTodos} onToggle={handleToggle}/>
     </div>
   )
 }
