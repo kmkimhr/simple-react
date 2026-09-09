@@ -4,3 +4,5 @@ export type Todo = {
   done: boolean;
   priority: 'low' | 'high';
 };
+
+export type TodoFilter = 'all' | 'active' | 'done';

@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import type { Todo } from '@/types/todo';
 import TodoList from '@/components/TodoList';
 import TodoForm from '@/components/TodoForm';
+import type { Todo, TodoFilter } from '@/types/todo';
+import FilterBar from '@/components/FilterBar';
 
 // 가데이터
 const initialTodos: Todo[] = [
@@ -12,9 +13,21 @@ const initialTodos: Todo[] = [
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
+  const [filter, setFilter] = useState<TodoFilter>('all');
+  const [keyword, setKeyword] = useState('');
 
   // 파생 값 — 상태로 두지 않고 매 렌더마다 계산한다
   const doneCount = todos.filter(todo => todo.done).length;
+
+  const normalizedKeyword = keyword.trim().toLowerCase();
+
+  const visibleTodos = todos
+    .filter((todo) => {
+      if (filter === 'active') return !todo.done;
+      if (filter === 'done') return todo.done;
+      return true;
+    })
+    .filter(todo => todo.title.toLowerCase().includes(normalizedKeyword));
 
   const handleToggle = (id: string) => {
     setTodos(prev =>
@@ -57,7 +70,15 @@ const App = () => {
         )}
       </header>
       <TodoForm onAdd={handleAdd} />
-      <TodoList todos={todos} onToggle={handleToggle} onDelete={handleDelete} />
+
+      <FilterBar
+        filter={filter}
+        keyword={keyword}
+        onFilterChange={setFilter}
+        onKeywordChange={setKeyword}
+      />
+
+      <TodoList todos={visibleTodos} onToggle={handleToggle} onDelete={handleDelete} />
     </div>
   );
 };
