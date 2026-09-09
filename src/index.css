@@ -72,3 +72,55 @@ h1 {
   color: var(--text-muted);
   text-decoration: line-through;
 }
+
+
+.todo-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.todo-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.todo-form button {
+  padding: 0.6rem 1rem;
+  font-size: 0.9375rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+.todo-delete {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0 0.25rem;
+  cursor: pointer;
+}
+
+.todo-delete:hover {
+  color: var(--danger);
+}
+
+.todo-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 2rem 0;
+}

@@ -80,7 +80,8 @@ export default TodoItem
 - 타입 선언은 `type`으로 통일 (`interface` 금지).
 - 타입 import는 `import type` (`verbatimModuleSyntax: true`).
 - 경로는 `@/` 별칭 사용. 상대경로 `../../` 금지.
-- 세미콜론 없음, 작은따옴표, 2칸 들여쓰기.
+- **세미콜론 필수.** 작은따옴표, 2칸 들여쓰기.
+- 세미콜론은 ESLint(`@stylistic/semi`)가 강제한다. `npx eslint . --fix`로 자동 수정.
 
 ### 금지
 
@@ -94,6 +95,7 @@ export default TodoItem
 
 | 파일 | 설정 |
 |---|---|
+| `eslint.config.js` | `@stylistic/semi: ['error', 'always']` — 세미콜론 강제 |
 | `tsconfig.app.json` | `paths: { "@/*": ["./src/*"] }` — `baseUrl` 없음 (TS 4.1+) |
 | `vite.config.ts` | `resolve.alias`에 동일한 `@` 등록 (tsconfig와 별개로 필요) |
 | `vite.config.ts` | `server.watch.usePolling: true` — WSL에서 `/mnt/c` 감시 불가. 제거 금지 |

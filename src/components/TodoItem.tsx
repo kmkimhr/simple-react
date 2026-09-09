@@ -1,10 +1,10 @@
-import type { Todo } from '@/types/todo'
+import type { Todo } from '@/types/todo';
 
 type TodoItemProps = {
   todo: Todo
   onToggle: (id: string) => void
   onDelete: (id: string) => void
-}
+};
 
 const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
   return (
@@ -24,7 +24,7 @@ const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
         aria-label={`${todo.title} 삭제`}
       >x</button>
     </li>
-  )
-}
+  );
+};
 
-export default TodoItem
+export default TodoItem;

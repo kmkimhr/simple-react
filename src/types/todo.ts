@@ -3,4 +3,4 @@ export type Todo = {
   title: string
   done: boolean
   priority: 'low' | 'high'
-}
+};
