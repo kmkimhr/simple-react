@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 import TodoList from '@/components/TodoList';
 import TodoForm from '@/components/TodoForm';
 import type { Todo, TodoFilter } from '@/types/todo';
 import FilterBar from '@/components/FilterBar';
+import { todosReducer } from '@/reducers/todosReducer';
 
 // 가데이터
 const initialTodos: Todo[] = [
@@ -12,21 +13,14 @@ const initialTodos: Todo[] = [
 ];
 
 const App = () => {
-  const [todos, setTodos] = useState<Todo[]>(initialTodos);
+  const [todos, dispatch] = useReducer(todosReducer, initialTodos);
   const [filter, setFilter] = useState<TodoFilter>('all');
   const [keyword, setKeyword] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const handleEditSubmit = (id: string, title: string) => {
-    setTodos(prev => prev.map(todo => (todo.id === id ? { ...todo, title } : todo)));
-    setEditingId(null);
-  };
-
   // 파생 값 — 상태로 두지 않고 매 렌더마다 계산한다
   const doneCount = todos.filter(todo => todo.done).length;
-
   const normalizedKeyword = keyword.trim().toLowerCase();
-
   const visibleTodos = todos
     .filter((todo) => {
       if (filter === 'active') return !todo.done;
@@ -35,29 +29,25 @@ const App = () => {
     })
     .filter(todo => todo.title.toLowerCase().includes(normalizedKeyword));
 
+  const handleAdd = (title: string) => {
+    dispatch({ type: 'added', id: crypto.randomUUID(), title });
+  };
+
   const handleToggle = (id: string) => {
-    setTodos(prev =>
-      prev.map(todo => (todo.id === id ? { ...todo, done: !todo.done } : todo)),
-    );
+    dispatch({ type: 'toggled', id });
   };
 
   const handleDelete = (id: string) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
+    dispatch({ type: 'deleted', id });
   };
 
-  const handleAdd = (title: string) => {
-    const newTodo: Todo = {
-      id: crypto.randomUUID(),
-      title,
-      done: false,
-      priority: 'low',
-    };
-
-    setTodos(prev => [...prev, newTodo]);
+  const handleEditSubmit = (id: string, title: string) => {
+    dispatch({ type: 'edited', id, title });
+    setEditingId(null);
   };
 
   const handleClearDone = () => {
-    setTodos(prev => prev.filter(todo => !todo.done));
+    dispatch({ type: 'clearedDone' });
   };
 
   return (

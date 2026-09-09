@@ -11,7 +11,6 @@ type TodoItemProps = {
   onEditCancel: () => void;
 };
 
-
 const TodoItem = ({
   todo, isEditing, onToggle, onDelete, onStartEdit, onEditSubmit, onEditCancel,
 }: TodoItemProps) => {
