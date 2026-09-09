@@ -1,7 +1,7 @@
 import type { Todo } from '../types/todo'
 
 type TodoItemProps = {
-  todo: Todo
+  todo: Todo,
 }
 
 function TodoItem({ todo }: TodoItemProps) {
@@ -9,7 +9,7 @@ function TodoItem({ todo }: TodoItemProps) {
     <li className="todo-item">
       <input type="checkbox" checked={todo.done} readOnly />
       <span className={todo.done ? 'todo-title done' : 'todo-title'}>
-        {todo.title}
+        {todo.title} {todo.priority === 'high' && '🔥'}
       </span>
     </li>
   )
