@@ -1,4 +1,7 @@
 import type { TodoFilter } from '@/types/todo';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import styles from './FilterBar.module.css';
 
 type FilterBarProps = {
   filter: TodoFilter;
@@ -20,25 +23,26 @@ const FilterBar = ({
   onKeywordChange,
 }: FilterBarProps) => {
   return (
-    <div className="filter-bar">
-      <div className="filter-tabs">
+    <div className={styles.bar}>
+      <div className={styles.tabs}>
         {FILTERS.map(item => (
-          <button
+          <Button
             key={item.value}
-            type="button"
-            className={item.value === filter ? 'filter-tab active' : 'filter-tab'}
+            size="sm"
+            variant={item.value === filter ? 'primary' : 'secondary'}
             onClick={() => onFilterChange(item.value)}
           >
             {item.label}
-          </button>
+          </Button>
         ))}
       </div>
-      <input
+      <Input
         type="search"
-        className="filter-search"
+        className={styles.search}
         value={keyword}
         onChange={e => onKeywordChange(e.target.value)}
         placeholder="검색"
+        aria-label="할 일 검색"
       />
     </div>
   );

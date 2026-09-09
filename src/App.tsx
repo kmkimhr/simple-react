@@ -4,6 +4,9 @@ import TodoForm from '@/components/TodoForm';
 import type { Todo, TodoFilter } from '@/types/todo';
 import FilterBar from '@/components/FilterBar';
 import { todosReducer } from '@/reducers/todosReducer';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import Button from '@/components/ui/Button';
+import styles from './App.module.css';
 
 // 가데이터
 const initialTodos: Todo[] = [
@@ -20,14 +23,15 @@ const init = (fallback: Todo[]): Todo[] => {
 
   try {
     return JSON.parse(saved) as Todo[];
-  } catch {
+  }
+  catch {
     return fallback;
   }
 };
 
 const App = () => {
   const [todos, dispatch] = useReducer(todosReducer, initialTodos, init);
-  const [filter, setFilter] = useState<TodoFilter>('all');
+  const [filter, setFilter] = useLocalStorage<TodoFilter>('taskly.filter', 'all');
   const [keyword, setKeyword] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -68,18 +72,18 @@ const App = () => {
   };
 
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className={styles.app}>
+      <header className={styles.header}>
         <div>
           <h1>Taskly</h1>
-          <p className="app-subtitle">
+          <p className={styles.subtitle}>
             할 일 {todos.length}개 · 완료 {doneCount}개
           </p>
         </div>
         {doneCount > 0 && (
-          <button type="button" className="clear-done" onClick={handleClearDone}>
+          <Button variant="secondary" size="sm" onClick={handleClearDone}>
             완료 삭제
-          </button>
+          </Button>
         )}
       </header>
       <TodoForm onAdd={handleAdd} />
@@ -96,7 +100,7 @@ const App = () => {
         editingId={editingId}
         onToggle={handleToggle}
         onDelete={handleDelete}
-        onStartEdit={setEditingId}
+        onEditStart={setEditingId}
         onEditSubmit={handleEditSubmit}
         onEditCancel={() => setEditingId(null)}
       />

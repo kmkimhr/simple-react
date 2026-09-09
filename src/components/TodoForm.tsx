@@ -1,4 +1,7 @@
 import { useId } from 'react';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import styles from './TodoForm.module.css';
 
 type TodoFormProps = {
   onAdd: (title: string) => void;
@@ -14,16 +17,18 @@ const TodoForm = ({ onAdd }: TodoFormProps) => {
   };
 
   return (
-    <form className="todo-form" action={handleAction}>
-      <label htmlFor={inputId} className="sr-only">할 일 입력</label>
-      <input
+    <form className={styles.form} action={handleAction}>
+      <label htmlFor={inputId} className="sr-only">
+        할 일 입력
+      </label>
+      <Input
         id={inputId}
         name="title"
         type="text"
-        className="todo-input"
+        className={styles.input}
         placeholder="할 일을 입력하세요"
       />
-      <button type="submit">추가</button>
+      <Button type="submit">추가</Button>
     </form>
   );
 };

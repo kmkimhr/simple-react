@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
+import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import styles from './TodoEditForm.module.css';
 
 type TodoEditFormProps = {
   initialTitle: string;
@@ -7,7 +10,11 @@ type TodoEditFormProps = {
   onCancel: () => void;
 };
 
-const TodoEditForm = ({ initialTitle, onSubmit, onCancel }: TodoEditFormProps) => {
+const TodoEditForm = ({
+  initialTitle,
+  onSubmit,
+  onCancel,
+}: TodoEditFormProps) => {
   const [draft, setDraft] = useState(initialTitle);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -24,16 +31,20 @@ const TodoEditForm = ({ initialTitle, onSubmit, onCancel }: TodoEditFormProps) =
   };
 
   return (
-    <form className="todo-edit" onSubmit={handleSubmit}>
-      <input
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <Input
         ref={inputRef}
         type="text"
-        className="todo-input"
+        className={styles.input}
         value={draft}
         onChange={e => setDraft(e.target.value)}
       />
-      <button type="submit">저장</button>
-      <button type="button" onClick={onCancel}>취소</button>
+      <Button type="submit" size="sm">
+        저장
+      </Button>
+      <Button variant="secondary" size="sm" onClick={onCancel}>
+        취소
+      </Button>
     </form>
   );
 };

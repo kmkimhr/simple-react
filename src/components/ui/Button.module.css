@@ -1,0 +1,51 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-family: inherit;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* size */
+.sm {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.md {
+  padding: 0.6rem 1rem;
+  font-size: 0.9375rem;
+}
+
+/* variant */
+.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.secondary {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+.secondary:hover {
+  color: var(--text);
+}
+
+.ghost {
+  background: none;
+  color: var(--text-muted);
+}
+
+.ghost:hover {
+  color: var(--danger);
+}
