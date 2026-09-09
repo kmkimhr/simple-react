@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import TodoList from '@/components/TodoList';
 import TodoForm from '@/components/TodoForm';
 import type { Todo, TodoFilter } from '@/types/todo';
@@ -12,8 +12,21 @@ const initialTodos: Todo[] = [
   { id: '3', title: 'props 타입 직접 하나 추가해보기', done: false, priority: 'low' },
 ];
 
+const STORAGE_KEY = 'taskly.todos';
+
+const init = (fallback: Todo[]): Todo[] => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return fallback;
+
+  try {
+    return JSON.parse(saved) as Todo[];
+  } catch {
+    return fallback;
+  }
+};
+
 const App = () => {
-  const [todos, dispatch] = useReducer(todosReducer, initialTodos);
+  const [todos, dispatch] = useReducer(todosReducer, initialTodos, init);
   const [filter, setFilter] = useState<TodoFilter>('all');
   const [keyword, setKeyword] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -28,6 +41,10 @@ const App = () => {
       return true;
     })
     .filter(todo => todo.title.toLowerCase().includes(normalizedKeyword));
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
 
   const handleAdd = (title: string) => {
     dispatch({ type: 'added', id: crypto.randomUUID(), title });
