@@ -20,3 +20,15 @@
   color: var(--text-muted);
   font-size: 0.875rem;
 }
+
+.modalBody {
+  margin: 0 0 1.25rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

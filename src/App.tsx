@@ -7,6 +7,7 @@ import { todosReducer } from '@/reducers/todosReducer';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import Button from '@/components/ui/Button';
 import styles from './App.module.css';
+import Modal from '@/components/ui/Modal';
 
 // 가데이터
 const initialTodos: Todo[] = [
@@ -45,6 +46,20 @@ const App = () => {
       return true;
     })
     .filter(todo => todo.title.toLowerCase().includes(normalizedKeyword));
+
+
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
+  const pendingTodo = todos.find(todo => todo.id === pendingDeleteId) ?? null;
+
+  const handleDeleteRequest = (id: string) => {
+    setPendingDeleteId(id);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (pendingDeleteId) dispatch({ type: 'deleted', id: pendingDeleteId });
+    setPendingDeleteId(null);
+  };
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
@@ -99,12 +114,28 @@ const App = () => {
         todos={visibleTodos}
         editingId={editingId}
         onToggle={handleToggle}
-        onDelete={handleDelete}
+        onDelete={handleDeleteRequest}
         onEditStart={setEditingId}
         onEditSubmit={handleEditSubmit}
         onEditCancel={() => setEditingId(null)}
       />
+      <Modal
+        isOpen={pendingTodo !== null}
+        title="할 일 삭제"
+        onClose={() => setPendingDeleteId(null)}
+      >
+        <p className={styles.modalBody}>
+          "{pendingTodo?.title}"을(를) 삭제할까요?
+        </p>
+        <div className={styles.modalActions}>
+          <Button variant="secondary" onClick={() => setPendingDeleteId(null)}>
+            취소
+          </Button>
+          <Button onClick={handleDeleteConfirm}>삭제</Button>
+        </div>
+      </Modal>
     </div>
+
   );
 };
 
