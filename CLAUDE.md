@@ -98,11 +98,13 @@ export default TodoItem
 ## 명령어
 
 ```bash
-npm run dev       # 개발 서버
-npm run build     # 프로덕션 빌드 (tsc -b && vite build)
-npm run lint      # ESLint
-npx tsc --noEmit  # 타입 검사만
+npm run dev            # 개발 서버
+npm run build          # lint → 타입 검사 → 번들링 (dist/ 생성)
+npx vite preview       # dist/ 를 로컬에서 확인
 ```
+
+`build`는 `eslint . && tsc -b && vite build`. 하나라도 실패하면 거기서 멈춘다.
+검사만 하려면 `npx eslint .` / `npx tsc --noEmit -p tsconfig.app.json`.
 
 ## 커밋
 
