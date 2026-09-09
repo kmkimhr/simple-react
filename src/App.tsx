@@ -14,24 +14,25 @@ const App = () => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
   const handleToggle = (id: string) => {
-    setTodos(
-      todos.map(todo => (todo.id === id ? { ...todo, done: !todo.done } : todo)),
-    );
+    setTodos(prev => prev.filter(todo => todo.id !== id));
   };
 
+
   const handleDelete = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    setTodos(prev => prev.filter(todo => todo.id !== id));
   };
 
   const handleAdd = (title: string) => {
     const newTodo: Todo = {
       id: crypto.randomUUID(),
-      title,
+      title: title,
       done: false,
-      priority: 'low',
-    };
+      priority: 'low'
+    }
+
     setTodos([...todos, newTodo]);
   };
+  
 
   return (
     <div className="app">
