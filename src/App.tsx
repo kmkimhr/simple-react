@@ -13,10 +13,14 @@ const initialTodos: Todo[] = [
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
-  const handleToggle = (id: string) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
-  };
+  // 파생 값 — 상태로 두지 않고 매 렌더마다 계산한다
+  const doneCount = todos.filter(todo => todo.done).length;
 
+  const handleToggle = (id: string) => {
+    setTodos(prev =>
+      prev.map(todo => (todo.id === id ? { ...todo, done: !todo.done } : todo)),
+    );
+  };
 
   const handleDelete = (id: string) => {
     setTodos(prev => prev.filter(todo => todo.id !== id));
@@ -25,20 +29,32 @@ const App = () => {
   const handleAdd = (title: string) => {
     const newTodo: Todo = {
       id: crypto.randomUUID(),
-      title: title,
+      title,
       done: false,
-      priority: 'low'
-    }
+      priority: 'low',
+    };
 
-    setTodos([...todos, newTodo]);
+    setTodos(prev => [...prev, newTodo]);
   };
-  
+
+  const handleClearDone = () => {
+    setTodos(prev => prev.filter(todo => !todo.done));
+  };
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Taskly</h1>
-        <p className="app-subtitle">할 일 {todos.length}개</p>
+        <div>
+          <h1>Taskly</h1>
+          <p className="app-subtitle">
+            할 일 {todos.length}개 · 완료 {doneCount}개
+          </p>
+        </div>
+        {doneCount > 0 && (
+          <button type="button" className="clear-done" onClick={handleClearDone}>
+            완료 삭제
+          </button>
+        )}
       </header>
       <TodoForm onAdd={handleAdd} />
       <TodoList todos={todos} onToggle={handleToggle} onDelete={handleDelete} />
